@@ -1,11 +1,15 @@
 import 'dart:math';
 
 import 'package:dgame/game/game.dart';
+import 'package:dgame/pages/home_page.dart';
 import 'package:dgame/pages/hpage.dart';
+import 'package:dgame/providers/wallet_provider.dart';
+import 'package:dgame/widgets/page_view.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
@@ -17,7 +21,12 @@ void main() async {
     realtimeClientOptions: const RealtimeClientOptions(eventsPerSecond: 40),
   );
   Flame.device.fullScreen();
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<WalletProvider>(create: (_) => WalletProvider()),
+    ],
+    child: MyApp(),
+  ));
 }
 
 final supabase = Supabase.instance.client;
@@ -27,11 +36,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'UFO Shooting Game',
+
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        fontFamily: "PressStart2P",
+        brightness: Brightness.dark,
+      ),
       // home: GamePage(),
-      home: HPage(),
+      home: Customslider(),
     );
   }
 }
@@ -131,7 +145,7 @@ class _GamePageState extends State<GamePage> {
                     Navigator.pushReplacement(
                         context,
                         CupertinoPageRoute(
-                          builder: (context) => HPage(),
+                          builder: (context) => Customslider(),
                         ));
                   },
                   child: Text(
